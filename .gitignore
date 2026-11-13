@@ -25,3 +25,5 @@ yarn-error.log
 # Designer's reference mockup (local comparison only, not ours to redistribute)
 /public/reference
 /docs/reference
+/dist
+/.npm-cache
