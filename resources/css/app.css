@@ -1,0 +1,427 @@
+@import 'tailwindcss';
+
+@source "../**/*.blade.php";
+@source "../**/*.js";
+
+/* ------------------------------------------------------------------
+   Design tokens — sampled from the reference design
+------------------------------------------------------------------- */
+@theme {
+    --font-sans: 'Poppins', ui-sans-serif, system-ui, sans-serif;
+
+    --color-ink: #2e2342;          /* headings */
+    --color-body: #6f6780;         /* paragraph text */
+    --color-muted: #8f88a0;
+    --color-lavender: #faf4fb;     /* page background */
+    --color-lilac: #f1e6fb;
+    --color-purple: #b672ff;
+    --color-purple-soft: #be7fe4;
+    --color-accent: #b478d7;       /* "Benefits", "Become An Instructor" */
+    --color-orchid: #ca76e6;
+    --color-pink: #f889af;
+    --color-pink-soft: #fbd3e1;
+    --color-star: #f8b84e;
+}
+
+:root {
+    --grad: linear-gradient(110deg, #b672ff 0%, #d17be3 50%, #f889af 100%);
+    --grad-btn: linear-gradient(90deg, #be7fe4 0%, #ca76e6 100%);
+    --grad-band: linear-gradient(90deg, #b672ff 0%, #d17be3 100%);
+    --shadow-card: 0 10px 30px rgba(120, 72, 170, .12);
+    --container: 1116px;
+}
+
+/* ------------------------------------------------------------------
+   Base
+------------------------------------------------------------------- */
+html { scroll-behavior: smooth; }
+html:has(#ref-overlay) { scroll-behavior: auto; }
+body {
+    font-family: var(--font-sans);
+    background: var(--color-lavender);
+    color: var(--color-ink);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+}
+
+.container-x {
+    width: 100%;
+    max-width: calc(var(--container) + 32px);
+    margin-inline: auto;
+    padding-inline: 16px;
+}
+
+.grad { background: var(--grad); }
+.accent { color: var(--color-accent); }
+
+.btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    font-weight: 500; border-radius: 6px; transition: transform .15s, box-shadow .15s, filter .15s;
+    white-space: nowrap;
+}
+.btn:hover { transform: translateY(-1px); filter: brightness(1.04); }
+.btn-primary { background: var(--grad-btn); color: #fff; box-shadow: 0 6px 16px rgba(190, 127, 228, .35); }
+.btn-outline { border: 1.5px solid var(--color-orchid); color: var(--color-ink); background: #fff; }
+.btn-white { background: #fff; color: var(--color-orchid); }
+
+/* dashed decorative outline */
+.dashed { border: 2px dashed var(--color-orchid); }
+
+/* ------------------------------------------------------------------
+   Navbar
+------------------------------------------------------------------- */
+.nav { height: 112px; display: flex; align-items: center; position: relative; z-index: 30; }
+.logo { font-size: 32px; font-weight: 600; color: var(--color-ink); letter-spacing: -.3px; }
+.nav-links { display: flex; gap: 30px; font-size: 20px; color: var(--color-ink); margin-left: 137px; margin-right: auto; }
+.nav-links button, .nav-links a { display: inline-flex; align-items: center; gap: 6px; }
+.nav-drop { position: relative; }
+.nav-drop-menu {
+    position: absolute; top: calc(100% + 12px); left: -12px; min-width: 180px; z-index: 40;
+    background: #fff; border-radius: 10px; box-shadow: var(--shadow-card); padding: 8px;
+    opacity: 0; visibility: hidden; transform: translateY(-4px); transition: .15s;
+}
+.nav-drop-menu a { display: block; padding: 8px 12px; border-radius: 6px; font-size: 15px; }
+.nav-drop-menu a:hover { background: var(--color-lavender); color: var(--color-orchid); }
+.nav-drop:hover .nav-drop-menu, .nav-drop.open .nav-drop-menu { opacity: 1; visibility: visible; transform: none; }
+.nav-actions { gap: 23px; }
+.nav-actions .btn { height: 44px; font-size: 20px; }
+.nav-actions .btn-outline { width: 115px; }
+.nav-actions .btn-primary { width: 142px; }
+
+/* ------------------------------------------------------------------
+   Hero
+------------------------------------------------------------------- */
+.hero { position: relative; }
+/* Desktop hero: art is placed with coordinates measured on the 1440px reference,
+   relative to the container's top-left corner (x=162, y=112 on the page). */
+.hero-grid { position: relative; height: 598px; }
+.hero-copy { position: relative; z-index: 2; padding-top: 76px; }
+.hero h1 { font-size: 61px; line-height: 70px; font-weight: 600; color: var(--color-ink); max-width: 540px; letter-spacing: -.2px; }
+.hero p { margin-top: 22px; font-size: 17.5px; line-height: 27px; color: var(--color-body); max-width: 556px; }
+.hero-actions { margin-top: 24px; display: flex; align-items: center; gap: 63px; }
+.hero-actions .btn { height: 43px; width: 153px; font-size: 18px; }
+.play-link { display: inline-flex; align-items: center; gap: 11px; font-size: 17px; color: var(--color-ink); text-decoration: underline; text-underline-offset: 3px; }
+.play-icon { width: 29px; height: 29px; border-radius: 9999px; background: var(--color-lilac); display: grid; place-items: center; color: var(--color-purple); }
+
+/* Clip only the bottom edge so the girl is cut off by the partner band, as in the design. */
+.hero-art { position: absolute; inset: 0 16px; pointer-events: none; z-index: 1; clip-path: inset(-200px -200px 0 -200px); }
+.hero-ring {
+    position: absolute; left: 617px; top: 45px; width: 450px; height: 450px;
+    border-radius: 9999px; border: 2px dashed var(--color-orchid); display: grid; place-items: center;
+}
+.hero-circle { width: 386px; height: 386px; border-radius: 9999px; background: linear-gradient(200deg, #d6a6f8 0%, #b672ff 55%, #a960f5 100%); }
+.hero-girl { position: absolute; left: 828px; top: 0; transform: translateX(-50%); height: 720px; width: auto; max-width: none; }
+
+.float-card {
+    position: absolute; z-index: 3; pointer-events: auto; background: rgba(255, 255, 255, .9); backdrop-filter: blur(6px);
+    border-radius: 8px; box-shadow: var(--shadow-card); color: var(--color-ink);
+}
+.fc-courses { left: 554px; top: 189px; width: 207px; height: 54px; display: flex; align-items: center; gap: 14px; padding: 0 12px; }
+.fc-courses .ico { width: 34px; height: 34px; border-radius: 9999px; background: var(--color-purple-soft); color: #fff; display: grid; place-items: center; }
+.fc-value { font-size: 20px; font-weight: 600; line-height: 1.05; color: var(--color-purple); }
+.fc-courses .fc-value { text-align: center; }
+.fc-label { font-size: 15px; line-height: 1.2; }
+.fc-students { left: 936px; top: 225px; width: 202px; height: 117px; padding-top: 14px; text-align: center; }
+.fc-students .fc-value { color: var(--color-ink); }
+.avatars { display: flex; justify-content: center; margin-top: 12px; }
+.avatars img { width: 32px; height: 32px; border-radius: 9999px; border: 2px solid #fff; object-fit: cover; margin-left: -9px; }
+.avatars img:first-child { margin-left: 0; }
+.fc-class { left: 601px; top: 374px; width: 193px; height: 95px; padding: 12px 14px; }
+.fc-class .row { display: flex; gap: 10px; align-items: center; }
+.fc-class img { width: 32px; height: 32px; border-radius: 9999px; object-fit: cover; }
+.fc-class .t { font-size: 13px; font-weight: 500; color: var(--color-purple); }
+.fc-class .s { font-size: 9px; color: var(--color-muted); }
+.fc-class .btn { margin: 10px auto 0; display: flex; width: 86px; height: 27px; font-size: 11px; }
+
+/* ------------------------------------------------------------------
+   Partner band
+------------------------------------------------------------------- */
+.band { background: var(--grad-band); height: 108px; display: flex; align-items: center; }
+.band-logos { display: flex; justify-content: space-between; align-items: center; color: #fff; opacity: .95; }
+.band-logos svg { height: 45px; width: auto; }
+
+/* ------------------------------------------------------------------
+   Search
+------------------------------------------------------------------- */
+.search { padding-top: 88px; text-align: center; }
+.section-title { font-size: 33px; line-height: 43px; font-weight: 500; color: var(--color-ink); }
+.search form { margin-top: 24px; display: flex; justify-content: center; gap: 20px; }
+.search-field {
+    position: relative; width: 518px; height: 56px; background: #fff; border-radius: 6px;
+    box-shadow: 0 6px 20px rgba(120, 72, 170, .06);
+}
+.search-field svg { position: absolute; left: 30px; top: 50%; transform: translateY(-50%); color: var(--color-purple); }
+.search-field input { width: 100%; height: 100%; padding-left: 68px; padding-right: 16px; font-size: 20px; border-radius: 6px; outline: none; color: var(--color-ink); }
+.search-field input::placeholder { color: #a39cb2; }
+.search-field input:focus { box-shadow: 0 0 0 2px var(--color-orchid) inset; }
+.search .btn { width: 155px; height: 56px; font-size: 23px; font-weight: 500; }
+
+/* ------------------------------------------------------------------
+   Benefits
+------------------------------------------------------------------- */
+.benefits { padding-block: 122px 113px; }
+.benefits-grid { display: grid; grid-template-columns: 517px 1fr; gap: 100px; align-items: start; }
+.collage {
+    position: relative; width: 517px; height: 513px; padding: 11px;
+    border: 2.5px dashed var(--color-orchid); border-radius: 104px;
+}
+/* Each tile is rounded on its outer corner and on the corner facing the centre,
+   which leaves the four-point star of background showing in the middle. */
+.collage-grid { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; width: 100%; height: 100%; }
+.collage-grid > div { position: relative; overflow: hidden; }
+.collage-grid > div:nth-child(1) { border-radius: 90px 0 90px 0; }
+.collage-grid > div:nth-child(2) { border-radius: 0 90px 0 90px; }
+.collage-grid > div:nth-child(3) { border-radius: 0 90px 0 90px; }
+.collage-grid > div:nth-child(4) { border-radius: 90px 0 90px 0; }
+.collage-grid img { position: absolute; left: 50%; bottom: 0; transform: translateX(-50%); height: 92%; width: auto; max-width: none; }
+.tile-pink { background: #f4899f; }
+.tile-purple { background: #b57bf2; }
+
+.benefits h2 { font-size: 33px; line-height: 41px; font-weight: 600; max-width: 440px; }
+.benefit-list { margin-top: 20px; display: grid; gap: 36px; }
+.benefit { display: flex; gap: 34px; align-items: center; }
+.benefit-ico { flex: none; width: 61px; height: 61px; border-radius: 9999px; display: grid; place-items: center; color: #fff; }
+.benefit-ico.purple { background: var(--color-purple-soft); }
+.benefit-ico.pink { background: #f48aa9; }
+.benefit h3 { font-size: 21px; font-weight: 600; line-height: 30px; }
+.benefit p { margin-top: 4px; font-size: 14px; line-height: 19px; color: var(--color-body); max-width: 400px; }
+
+/* ------------------------------------------------------------------
+   Popular courses
+------------------------------------------------------------------- */
+.courses { background: var(--grad); padding-block: 77px 70px; color: #fff; text-align: center; }
+.courses .section-title, .testimonials .section-title { color: #fff; }
+.section-sub { margin: 8px auto 0; max-width: 560px; font-size: 16px; line-height: 22.5px; color: rgba(255,255,255,.9); }
+.course-grid { margin-top: 34px; display: grid; grid-template-columns: repeat(3, 342px); justify-content: space-between; text-align: left; }
+.course-card { height: 463px; background: #faf3fc; border: 3px solid #fff; border-radius: 22px; padding: 6px 6px 0; color: var(--color-ink); box-shadow: 0 14px 30px rgba(90, 40, 140, .16); transition: transform .2s; }
+.course-card:hover { transform: translateY(-4px); }
+.course-card .thumb { height: 225px; border-radius: 14px; overflow: hidden; }
+.course-card .thumb img { width: 100%; height: 100%; object-fit: cover; }
+.course-body { padding: 0 8px; }
+.course-meta-top { margin-top: 11px; height: 22px; display: flex; justify-content: space-between; align-items: center; }
+.tag { display: inline-flex; align-items: center; gap: 7px; height: 22px; padding: 0 10px; border-radius: 4px; background: #eedcf9; font-size: 13px; color: var(--color-ink); }
+.tag::before { content: ''; width: 6px; height: 6px; border-radius: 9999px; background: var(--color-purple); }
+.rating { display: inline-flex; align-items: center; gap: 4px; height: 22px; padding: 0 8px; border-radius: 4px; background: #d9b8f6; font-size: 12px; color: #fff; font-weight: 500; }
+.rating svg { color: #ffd166; }
+.course-card h3 { margin-top: 23px; font-size: 21px; font-weight: 600; line-height: 25px; max-width: 230px; height: 50px; }
+.course-stats { margin-top: 20px; display: flex; gap: 26px; font-size: 14px; color: var(--color-body); padding-bottom: 12px; border-bottom: 1px solid #eadff2; }
+.course-stats span { display: inline-flex; align-items: center; gap: 10px; }
+.course-stats svg { color: var(--color-purple); }
+.course-foot { margin-top: 12px; display: flex; align-items: center; justify-content: space-between; }
+.price { font-size: 21px; font-weight: 600; line-height: 28px; }
+.teacher { display: inline-flex; align-items: center; gap: 10px; font-size: 15px; color: var(--color-purple); }
+.teacher .pic { position: relative; }
+.teacher img { width: 31px; height: 31px; border-radius: 9999px; object-fit: cover; }
+.teacher .pic::after { content: ''; position: absolute; right: -1px; bottom: -1px; width: 10px; height: 10px; border-radius: 9999px; background: #34c759; border: 2px solid #fff; }
+
+/* ------------------------------------------------------------------
+   Become an instructor
+------------------------------------------------------------------- */
+.instructor { padding-block: 120px 113px; }
+.instructor-grid { display: grid; grid-template-columns: 1fr 371px; gap: 80px; align-items: start; }
+.instructor h2 { font-size: 32px; line-height: 38px; font-weight: 600; max-width: 520px; }
+.instructor p.lead { margin-top: 8px; font-size: 15.5px; line-height: 21.6px; color: var(--color-body); max-width: 440px; }
+.instructor h3 { margin-top: 25px; font-size: 30px; line-height: 38px; font-weight: 600; }
+.perks { margin-top: 9px; display: grid; grid-template-columns: 284px 1fr; grid-auto-flow: column; grid-template-rows: repeat(4, 30.6px); max-width: 580px; }
+.perks li { display: flex; align-items: center; gap: 12px; font-size: 16px; font-weight: 500; }
+.perks li::before { content: ''; width: 9px; height: 9px; border-radius: 9999px; background: var(--color-purple-soft); }
+.instructor .btn { margin-top: 24px; height: 45px; width: 270px; font-size: 19px; }
+.arch { width: 371px; height: 436px; padding: 10px; border: 2.5px dashed var(--color-orchid); border-top-style: dashed; border-radius: 0 0 186px 186px; }
+.arch-inner { width: 100%; height: 100%; border-radius: 0 0 176px 176px; overflow: hidden; background: linear-gradient(180deg, #b672ff 0%, #f497bd 100%); position: relative; }
+.arch-inner img { position: absolute; left: 50%; bottom: 0; transform: translateX(-50%); height: 92%; width: auto; max-width: none; }
+
+/* ------------------------------------------------------------------
+   Testimonials + subscribe + footer share one gradient backdrop
+------------------------------------------------------------------- */
+.grad-stack { background: var(--grad); position: relative; }
+.testimonials { padding-block: 70px 73px; text-align: center; color: #fff; }
+.testimonials .section-sub { margin-top: 4px; max-width: 600px; font-size: 16.5px; }
+.t-viewport { margin-top: 70px; overflow: hidden; }
+.t-track { display: flex; gap: 32px; transition: transform .45s ease; }
+.t-card { flex: 0 0 351px; height: 178px; background: #faf4fb; border-radius: 12px; padding: 25px 20px 0 23px; text-align: left; color: var(--color-ink); box-shadow: 0 14px 30px rgba(90, 40, 140, .14); }
+.t-head { display: flex; align-items: center; gap: 11px; padding-left: 9px; }
+.t-head img { width: 65px; height: 65px; border-radius: 9999px; object-fit: cover; border: 2px solid var(--color-orchid); padding: 2px; background: #fff; }
+.t-name { font-size: 15px; font-weight: 600; line-height: 20px; color: var(--color-purple); }
+.t-role { font-size: 7px; line-height: 10px; color: var(--color-muted); }
+.stars { color: var(--color-star); font-size: 8px; line-height: 12px; letter-spacing: 1px; }
+.t-card p { margin-top: 11px; font-size: 14.5px; line-height: 21.6px; color: var(--color-ink); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.t-controls { margin-top: 39px; height: 24px; display: flex; justify-content: center; align-items: center; gap: 22px; font-size: 14px; }
+.t-controls button { width: 24px; height: 24px; display: grid; place-items: center; border-radius: 9999px; transition: background .15s; }
+.t-controls button:hover { background: rgba(255,255,255,.2); }
+
+.subscribe-panel { background: var(--color-lavender); border-radius: 110px 0 110px 0; padding-block: 88px 81px; }
+.subscribe-card { width: 785px; max-width: 100%; margin-inline: auto; background: var(--grad); border-radius: 25px; padding: 23px 40px 46px; text-align: center; color: #fff; box-shadow: 0 20px 40px rgba(182, 114, 255, .25); }
+.subscribe-card h2 { font-size: 32px; font-weight: 500; line-height: 40px; }
+.subscribe-card p { margin: 4px auto 0; max-width: 430px; font-size: 16.5px; line-height: 21.6px; color: rgba(255,255,255,.92); }
+.subscribe-card form { margin-top: 31px; display: flex; justify-content: center; gap: 23px; }
+.subscribe-card input { width: 394px; height: 58px; border-radius: 6px; background: #fff; padding: 0 26px; font-size: 15px; color: var(--color-ink); outline: none; }
+.subscribe-card input::placeholder { color: var(--color-muted); }
+.subscribe-card .btn { width: 187px; height: 58px; font-size: 23px; font-weight: 500; }
+
+.footer { padding-block: 64px 27px; color: #fff; }
+.footer-grid { display: grid; grid-template-columns: 322px 214px 197px 232px 1fr; }
+.footer .logo { color: #fff; font-size: 33px; line-height: 40px; display: block; }
+.footer-about { margin-top: 3px; font-size: 16px; line-height: 22.5px; max-width: 200px; }
+.socials { margin-top: 9px; display: flex; gap: 13px; }
+.socials a { width: 22px; height: 22px; border-radius: 9999px; background: #fff; color: var(--color-orchid); display: grid; place-items: center; }
+.footer h4 { font-size: 20px; line-height: 40px; font-weight: 500; }
+.footer ul { margin-top: 6px; display: grid; gap: 12.4px; font-size: 14.5px; line-height: 20px; color: rgba(255,255,255,.92); }
+.footer ul a:hover { color: #fff; text-decoration: underline; }
+.footer-bottom { margin-top: 22px; border-top: 1px solid rgba(255,255,255,.4); padding-top: 27px; text-align: center; font-size: 12px; line-height: 18px; }
+
+/* ------------------------------------------------------------------
+   Mobile drawer
+------------------------------------------------------------------- */
+.drawer { position: fixed; inset: 0; z-index: 60; background: rgba(46, 35, 66, .4); opacity: 0; visibility: hidden; transition: .2s; }
+.drawer.open { opacity: 1; visibility: visible; }
+.drawer-panel { position: absolute; top: 0; right: 0; width: 280px; height: 100%; background: #fff; padding: 24px; transform: translateX(100%); transition: transform .25s; display: flex; flex-direction: column; gap: 18px; }
+.drawer.open .drawer-panel { transform: none; }
+
+/* ------------------------------------------------------------------
+   Responsive
+   Below 1148px the desktop composition no longer fits, so the page
+   switches to the mobile design (measured on the 375px reference).
+   Tablets get the same mobile layout, scaled up with `zoom`.
+------------------------------------------------------------------- */
+.burger { display: none; }
+.only-mobile { display: none; }
+
+@media (max-width: 1147.98px) {
+    .only-mobile { display: inline; }
+    .only-desktop { display: none; }
+
+    .container-x { padding-inline: 17px; }
+    .nav { height: 60px; }
+    .nav-links, .nav-actions { display: none !important; }
+    .burger { display: grid; place-items: center; margin-left: auto; color: var(--color-ink); }
+    .logo { font-size: 24px; }
+
+    /* Hero */
+    .hero-grid { height: auto; }
+    .hero-copy { padding-top: 4px; text-align: center; }
+    .hero h1 { font-size: 31px; line-height: 35px; max-width: 270px; margin-inline: auto; letter-spacing: 0; }
+    .hero p { margin: 6px auto 0; font-size: 13px; line-height: 17px; max-width: 300px; }
+    .hero-actions { justify-content: center; gap: 48px; margin-top: 10.5px; }
+    .hero-actions .btn { width: 99px; height: 29px; font-size: 13px; }
+    .play-link { font-size: 11px; gap: 8px; }
+    .play-icon { width: 16px; height: 16px; }
+    .play-icon svg { width: 9px; height: 9px; }
+
+    .hero-art { position: relative; inset: auto; height: 293px; margin: 17px auto 0; width: 341px; }
+    .hero-ring { left: 69px; top: 37px; width: 205px; height: 205px; border-width: 1.5px; }
+    .hero-circle { width: 180px; height: 180px; }
+    .hero-girl { left: 174px; top: 18px; height: 330px; }
+    .float-card { border-radius: 5px; }
+    .fc-courses { left: 41px; top: 105px; width: 95px; height: 26px; gap: 6px; padding: 0 6px; }
+    .fc-courses .ico { width: 16px; height: 16px; }
+    .fc-courses .ico svg { width: 8px; height: 8px; }
+    .fc-value { font-size: 9px; }
+    .fc-label { font-size: 7px; }
+    .fc-students { left: 217px; top: 120px; width: 92px; height: 55px; padding-top: 7px; }
+    .avatars { margin-top: 5px; }
+    .avatars img { width: 15px; height: 15px; margin-left: -4px; border-width: 1px; }
+    .fc-class { left: 62px; top: 188px; width: 89px; height: 47px; padding: 6px 7px; }
+    .fc-class .row { gap: 5px; }
+    .fc-class img { width: 15px; height: 15px; }
+    .fc-class .t { font-size: 6px; }
+    .fc-class .s { font-size: 4px; }
+    .fc-class .btn { width: 40px; height: 12px; font-size: 5px; margin-top: 5px; border-radius: 3px; }
+
+    /* Partner band: logos overflow evenly on both sides, as in the design */
+    .band { height: 47px; overflow: hidden; }
+    .band-logos { justify-content: center; gap: 20px; padding-inline: 0; }
+    .band-logos svg { height: 18px; flex: none; }
+
+    /* Search */
+    .search { padding-top: 25px; padding-inline: 19px; }
+    .section-title { font-size: 21px; line-height: 28px; }
+    .search form { margin-top: 9px; gap: 10px; }
+    .search-field { flex: 1; width: auto; height: 28px; border-radius: 4px; }
+    .search-field svg { left: 14px; width: 11px; height: 11px; }
+    .search-field input { padding-left: 32px; font-size: 10px; border-radius: 4px; }
+    .search .btn { width: 75px; height: 28px; font-size: 13px; border-radius: 4px; }
+
+    /* Benefits */
+    .benefits { padding-block: 27px 36px; }
+    .benefits-grid { grid-template-columns: 1fr; gap: 33px; }
+    .collage { width: 291px; height: 285px; padding: 6px; border-width: 1.5px; border-radius: 58px; margin-inline: auto; }
+    .collage-grid > div:nth-child(1), .collage-grid > div:nth-child(4) { border-radius: 50px 0 50px 0; }
+    .collage-grid > div:nth-child(2), .collage-grid > div:nth-child(3) { border-radius: 0 50px 0 50px; }
+    .benefits h2 { font-size: 22.5px; line-height: 28px; max-width: 300px; }
+    .benefit-list { margin-top: 9px; gap: 21px; }
+    .benefit { gap: 26px; }
+    .benefit-ico { width: 40px; height: 40px; }
+    .benefit-ico svg { width: 20px; height: 20px; }
+    .benefit h3 { font-size: 16px; line-height: 22px; }
+    .benefit p { margin-top: 2px; font-size: 10px; line-height: 14px; max-width: 272px; }
+
+    /* Popular courses */
+    .courses { padding-block: 27px 33px; }
+    .section-sub { margin-top: 4px; font-size: 10.2px; line-height: 13.5px; max-width: 341px; }
+    .course-grid { margin-top: 33px; grid-template-columns: 306px; justify-content: center; gap: 13px; }
+    .course-card { height: 409px; border-radius: 20px; padding: 5px 5px 0; }
+    .course-card .thumb { height: 197px; border-radius: 12px; }
+    .course-body { padding: 0 8px; }
+    .course-meta-top { margin-top: 12px; height: 20px; }
+    .tag { height: 20px; font-size: 12px; }
+    .rating { height: 20px; font-size: 11px; }
+    .course-card h3 { margin-top: 18.5px; font-size: 18.5px; line-height: 23px; height: 46px; }
+    .course-stats { margin-top: 18.5px; font-size: 12px; gap: 22px; padding-bottom: 10px; }
+    .course-stats svg { width: 16px; height: 16px; }
+    .course-foot { margin-top: 12px; }
+    .price { font-size: 17px; line-height: 24px; }
+    .teacher { font-size: 14px; gap: 12px; }
+    .teacher img { width: 24px; height: 24px; }
+    .teacher .pic::after { width: 8px; height: 8px; }
+
+    /* Instructor */
+    .instructor { padding-block: 31px 28px; }
+    .instructor-grid { grid-template-columns: 1fr; gap: 30px; }
+    .instructor h2 { font-size: 21.5px; line-height: 25px; max-width: 260px; }
+    .instructor p.lead { margin-top: 1px; font-size: 10.4px; line-height: 15px; max-width: 255px; }
+    .instructor h3 { margin-top: 11px; font-size: 20.5px; line-height: 26px; }
+    .perks { margin-top: 7px; grid-template-columns: 187px 1fr; grid-template-rows: repeat(4, 20px); }
+    .perks li { font-size: 9.5px; gap: 7px; }
+    .perks li::before { width: 6px; height: 6px; }
+    .instructor .btn { margin-top: 15px; width: 185px; height: 29px; font-size: 13px; }
+    .arch { justify-self: center; width: 215px; height: 254px; padding: 6px; border-width: 1.5px; border-radius: 0 0 108px 108px; }
+    .arch-inner { border-radius: 0 0 102px 102px; }
+
+    /* Testimonials */
+    .testimonials { padding-block: 25px 30px; }
+    .testimonials .section-sub { margin-top: 2px; font-size: 10.5px; line-height: 13px; max-width: 341px; }
+    .t-viewport { margin-top: 19.5px; }
+    .t-track { flex-direction: column; align-items: center; gap: 13px; transform: none !important; }
+    .t-card { flex: none; width: 290px; height: 147px; padding: 22px 16px 0 19px; }
+    .t-card.extra { display: none; }
+    .t-head { gap: 9px; padding-left: 10px; }
+    .t-head img { width: 52px; height: 52px; }
+    .t-name { font-size: 14px; line-height: 18px; }
+    .t-card p { margin-top: 8px; font-size: 13px; line-height: 17px; }
+    .t-controls { margin-top: 22px; font-size: 14px; }
+
+    /* Subscribe + footer */
+    .subscribe-panel { border-radius: 30px 0 30px 0; padding-block: 32px; }
+    .subscribe-card { height: 110px; padding: 12px 14px 0; border-radius: 12px; }
+    .subscribe-card h2 { font-size: 15px; line-height: 20px; }
+    .subscribe-card p { margin-top: 2px; font-size: 7.5px; line-height: 9px; max-width: 185px; }
+    .subscribe-card form { margin-top: 13.5px; gap: 11px; }
+    .subscribe-card input { width: 171px; height: 25px; font-size: 6px; padding: 0 8px; border-radius: 3px; }
+    .subscribe-card .btn { width: 81px; height: 25px; font-size: 11px; border-radius: 3px; }
+
+    /* The mobile design keeps all five footer columns in one compact row. */
+    .footer { padding-block: 22px 8px; }
+    .footer-grid { grid-template-columns: 99px 66px 60px 70px 1fr; column-gap: 0; }
+    .footer .logo { font-size: 10px; line-height: 14px; }
+    .footer-about { font-size: 4.5px; line-height: 7px; max-width: 62px; margin-top: 0; }
+    .socials { gap: 5px; margin-top: 4px; }
+    .socials a { width: 6px; height: 6px; }
+    .socials svg { width: 4px; height: 4px; }
+    .footer h4 { font-size: 6.2px; line-height: 14px; }
+    .footer ul { margin-top: 0; gap: 5px; font-size: 4.5px; line-height: 5px; }
+    .footer-bottom { margin-top: 9px; padding-top: 6px; font-size: 4.5px; line-height: 7px; border-top-width: .5px; }
+}
+
+/* Tablets: show the mobile composition, scaled to the screen. */
+@media (min-width: 600px) and (max-width: 767.98px) { body { zoom: 1.6; } }
+@media (min-width: 768px) and (max-width: 1147.98px) { body { zoom: 2; } }
