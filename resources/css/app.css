@@ -101,9 +101,10 @@ body {
 .hero-copy { position: relative; z-index: 2; padding-top: 76px; }
 .hero h1 { font-size: 61px; line-height: 70px; font-weight: 600; color: var(--color-ink); max-width: 540px; letter-spacing: -.2px; }
 .hero p { margin-top: 22px; font-size: 17.5px; line-height: 27px; color: var(--color-body); max-width: 556px; }
-.hero-actions { margin-top: 24px; display: flex; align-items: center; gap: 63px; }
+.hero-actions { margin-top: 24px; display: flex; align-items: center; gap: 18px; }
 .hero-actions .btn { height: 43px; width: 153px; font-size: 18px; }
-.play-link { display: inline-flex; align-items: center; gap: 11px; font-size: 17px; color: var(--color-ink); text-decoration: underline; text-underline-offset: 3px; }
+.play-link { display: inline-flex; align-items: center; justify-content: center; gap: 10px; height: 43px; padding: 0 20px 0 12px; white-space: nowrap; font-size: 17px; font-weight: 500; color: var(--color-ink); background: #fff; border: 1.5px solid #e3cdf5; border-radius: 10px; transition: border-color .2s, box-shadow .2s; }
+.play-link:hover { border-color: var(--color-orchid); box-shadow: 0 8px 20px rgb(182 114 255 / .2); }
 .play-icon { width: 29px; height: 29px; border-radius: 9999px; background: var(--color-lilac); display: grid; place-items: center; color: var(--color-purple); }
 
 /* Clip only the bottom edge so the girl is cut off by the partner band, as in the design. */
@@ -215,7 +216,19 @@ body {
 .courses { background: var(--grad); padding-block: 77px 70px; color: #fff; text-align: center; }
 .courses .section-title, .testimonials .section-title { color: #fff; }
 .section-sub { margin: 8px auto 0; max-width: 560px; font-size: 16px; line-height: 22.5px; color: rgba(255,255,255,.9); }
-.course-grid { margin-top: 34px; display: grid; grid-template-columns: repeat(3, 342px); justify-content: space-between; text-align: left; }
+.course-slider { --cs-gap: 32px; margin-top: 18px; }
+.course-grid {
+    display: flex; gap: var(--cs-gap); overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scroll-behavior: smooth;
+    padding: 16px 6px 34px; margin-inline: -6px; text-align: left; scrollbar-width: none; outline: none;
+}
+.course-grid::-webkit-scrollbar { display: none; }
+.course-grid > .course-card { flex: 0 0 calc((100% - 12px - 2 * var(--cs-gap)) / 3); scroll-snap-align: start; }
+.cs-controls { display: flex; align-items: center; justify-content: center; gap: 18px; }
+.cs-arrow { width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; color: #fff; background: rgb(255 255 255 / .16); border: 1.5px solid rgb(255 255 255 / .55); backdrop-filter: blur(6px); transition: background .2s, color .2s, scale .2s; }
+.cs-arrow:hover { background: #fff; color: var(--color-purple); scale: 1.08; }
+.cs-dots { display: flex; gap: 8px; }
+.cs-dots button { width: 9px; height: 9px; border-radius: 9999px; background: rgb(255 255 255 / .45); transition: width .35s cubic-bezier(.65,0,.35,1), background .3s; }
+.cs-dots button[aria-current="true"] { width: 30px; background: #fff; }
 .course-card { height: 463px; background: #faf3fc; border: 3px solid #fff; border-radius: 22px; padding: 6px 6px 0; color: var(--color-ink); box-shadow: 0 14px 30px rgba(90, 40, 140, .16); transition: transform .25s ease, box-shadow .25s; }
 .course-card .thumb { height: 225px; border-radius: 14px; overflow: hidden; }
 .course-card .thumb img { width: 100%; height: 100%; object-fit: cover; }
@@ -258,18 +271,32 @@ body {
 .grad-stack { background: var(--grad); position: relative; }
 .testimonials { padding-block: 70px 73px; text-align: center; color: #fff; }
 .testimonials .section-sub { margin-top: 4px; max-width: 600px; font-size: 16.5px; }
-.t-viewport { margin-top: 70px; overflow: hidden; }
-.t-track { display: flex; gap: 32px; transition: transform .45s ease; }
-.t-card { flex: 0 0 351px; height: 178px; background: #faf4fb; border-radius: 12px; padding: 25px 20px 0 23px; text-align: left; color: var(--color-ink); box-shadow: 0 14px 30px rgba(90, 40, 140, .14); }
-.t-head { display: flex; align-items: center; gap: 11px; padding-left: 9px; }
-.t-head img { width: 65px; height: 65px; border-radius: 9999px; object-fit: cover; border: 2px solid var(--color-orchid); padding: 2px; background: #fff; }
-.t-name { font-size: 15px; font-weight: 600; line-height: 20px; color: var(--color-purple); }
-.t-role { font-size: 7px; line-height: 10px; color: var(--color-muted); }
-.stars { color: var(--color-star); font-size: 8px; line-height: 12px; letter-spacing: 1px; }
-.t-card p { margin-top: 11px; font-size: 14.5px; line-height: 21.6px; color: var(--color-ink); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-.t-controls { margin-top: 39px; height: 24px; display: flex; justify-content: center; align-items: center; gap: 22px; font-size: 14px; }
-.t-controls button { width: 24px; height: 24px; display: grid; place-items: center; border-radius: 9999px; transition: background .15s; }
-.t-controls button:hover { background: rgba(255,255,255,.2); }
+.t-stage { --card-w: 440px; position: relative; height: 300px; margin-top: 56px; perspective: 1200px; touch-action: pan-y; user-select: none; }
+.t-card {
+    position: absolute; left: 50%; top: 0; width: var(--card-w); min-height: 260px; margin-left: calc(var(--card-w) / -2);
+    display: flex; flex-direction: column; padding: 30px 30px 24px; border-radius: 22px; text-align: left; color: var(--color-ink);
+    background: linear-gradient(160deg, #fff 0%, #fbf3ff 100%); box-shadow: 0 24px 50px rgba(70, 20, 120, .22);
+    transition: transform .7s cubic-bezier(.65, 0, .35, 1), opacity .7s, filter .7s; will-change: transform;
+    transform: translateX(calc(var(--pos, 0) * 62%)) scale(calc(1 - var(--abs, 0) * .14)) rotateY(calc(var(--pos, 0) * -14deg));
+    opacity: calc(1 - var(--abs, 0) * .38); filter: blur(calc(var(--abs, 0) * 1.5px)); z-index: calc(10 - var(--abs, 0));
+}
+.t-card[data-hidden] { opacity: 0; pointer-events: none; }
+.t-card:not(.is-active) { cursor: pointer; }
+.t-card.is-active { box-shadow: 0 30px 60px rgba(70, 20, 120, .3), 0 0 0 1px rgb(255 255 255 / .8); }
+.t-quote { width: 40px; height: 30px; color: #e7cff8; }
+.t-card p { margin-top: 14px; flex: 1; font-size: 16px; line-height: 26px; color: var(--color-ink); }
+.t-head { margin-top: 20px; padding-top: 18px; border-top: 1px solid #efe3f7; display: flex; align-items: center; gap: 14px; }
+.t-head img { width: 54px; height: 54px; border-radius: 9999px; object-fit: cover; padding: 2px; background: var(--grad); }
+.t-name { font-size: 16px; font-weight: 600; line-height: 22px; color: var(--color-purple); }
+.t-role { font-size: 13px; line-height: 18px; color: var(--color-muted); }
+.t-head .stars { margin-left: auto; }
+.t-controls { margin-top: 34px; display: flex; justify-content: center; align-items: center; gap: 22px; }
+.t-progress { display: grid; gap: 8px; width: 150px; font-size: 14px; color: rgb(255 255 255 / .85); }
+.t-count b { font-size: 20px; font-weight: 600; color: #fff; }
+.t-bar { height: 3px; border-radius: 3px; background: rgb(255 255 255 / .3); overflow: hidden; }
+.t-bar span { display: block; height: 100%; width: 100%; background: #fff; transform-origin: 0 50%; scale: 0 1; }
+.t-bar span.run { animation: t-bar var(--deck-ms, 6000ms) linear forwards; }
+@keyframes t-bar { to { scale: 1 1; } }
 
 .subscribe-panel { background: var(--color-lavender); border-radius: 110px 0 110px 0; padding-block: 88px 81px; }
 .subscribe-card { width: 785px; max-width: 100%; margin-inline: auto; background: var(--grad); border-radius: 25px; padding: 23px 40px 46px; text-align: center; color: #fff; box-shadow: 0 20px 40px rgba(182, 114, 255, .25); }
@@ -399,12 +426,9 @@ html, body { overflow-x: clip; }
 .perks li { transition: translate .25s; }
 .perks li:hover { translate: 6px 0; }
 
-/* Testimonials: stars pop one by one, cards lift, counter flips */
+/* Testimonials: stars pop in on the active card, counter flips */
 .stars span { display: inline-block; }
-.t-card.is-visible .stars span { animation: pop .5s cubic-bezier(.34, 1.56, .64, 1) calc(var(--reveal-delay, 0ms) + 300ms + var(--i) * 110ms) both; }
-.t-card.reveal { transition: translate .7s cubic-bezier(.2,.7,.2,1), opacity .7s, box-shadow .3s; transition-delay: var(--reveal-delay, 0ms), var(--reveal-delay, 0ms), 0s; }
-.t-card.is-visible:hover { translate: 0 -6px; box-shadow: 0 22px 40px rgba(90, 40, 140, .22); transition-delay: 0s; }
-.t-track { transition: transform .6s cubic-bezier(.65, 0, .35, 1); }
+.t-card.is-active .stars span { animation: pop .5s cubic-bezier(.34, 1.56, .64, 1) calc(400ms + var(--i) * 110ms) both; }
 [data-counter] { display: inline-block; }
 [data-counter].flip { animation: flip .4s ease; }
 @keyframes flip { from { rotate: x 90deg; opacity: 0; } }
@@ -461,16 +485,17 @@ html, body { overflow-x: clip; }
 
     /* Hero */
     .hero-grid { height: auto; }
-    .hero-copy { padding-top: 4px; text-align: center; }
-    .hero h1 { font-size: 31px; line-height: 35px; max-width: 270px; margin-inline: auto; letter-spacing: 0; }
-    .hero p { margin: 6px auto 0; font-size: 13px; line-height: 17px; max-width: 300px; }
-    .hero-actions { justify-content: center; gap: 48px; margin-top: 10.5px; }
-    .hero-actions .btn { width: 120px; height: 40px; font-size: 14px; }
-    .play-link { font-size: 12px; gap: 8px; }
-    .play-icon { width: 16px; height: 16px; }
-    .play-icon svg { width: 9px; height: 9px; }
+    .hero-copy { padding-top: 24px; text-align: center; }
+    .hero h1 { font-size: 32px; line-height: 40px; max-width: 290px; margin-inline: auto; letter-spacing: -.3px; text-wrap: balance; }
+    .hero p { margin: 14px auto 0; font-size: 14px; line-height: 22px; max-width: 320px; text-wrap: pretty; }
+    .hero-actions { justify-content: center; gap: 14px; margin-top: 24px; }
+    .hero-actions > * { flex: 0 1 152px; }
+    .hero-actions .btn { width: auto; height: 44px; font-size: 15px; border-radius: 10px; }
+    .hero-actions .play-link { height: 44px; padding: 0 10px; gap: 8px; font-size: 14px; }
+    .play-icon { width: 22px; height: 22px; }
+    .play-icon svg { width: 10px; height: 10px; }
 
-    .hero-art { position: relative; inset: auto; height: 293px; margin: 17px auto 0; width: 341px; }
+    .hero-art { position: relative; inset: auto; height: 293px; margin: 24px auto 0; width: 341px; }
     .hero-ring { left: 69px; top: 37px; width: 205px; height: 205px; border-width: 1.5px; }
     .hero-circle { width: 180px; height: 180px; }
     .hero-girl { left: 174px; top: 18px; height: 330px; }
@@ -523,7 +548,10 @@ html, body { overflow-x: clip; }
     /* Popular courses */
     .courses { padding-block: 27px 33px; }
     .section-sub { margin-top: 6px; font-size: 12.5px; line-height: 18px; max-width: 341px; }
-    .course-grid { margin-top: 33px; grid-template-columns: 306px; justify-content: center; gap: 13px; }
+    .course-slider { --cs-gap: 14px; margin-top: 14px; }
+    .course-grid { padding: 14px calc((100% + 34px) / 2 - 153px) 26px; /* % here is the slider width, 34px narrower than the track */ margin-inline: calc(var(--gutter, 17px) * -1); scroll-padding-inline: calc(50% - 153px); }
+    .course-grid > .course-card { flex: 0 0 306px; scroll-snap-align: center; }
+    .cs-arrow { width: 38px; height: 38px; }
     .course-card { height: 409px; border-radius: 20px; padding: 5px 5px 0; }
     .course-card .thumb { height: 197px; border-radius: 12px; }
     .course-body { padding: 0 8px; }
@@ -555,15 +583,18 @@ html, body { overflow-x: clip; }
     /* Testimonials */
     .testimonials { padding-block: 25px 30px; }
     .testimonials .section-sub { margin-top: 6px; font-size: 12.5px; line-height: 18px; max-width: 341px; }
-    .t-viewport { margin-top: 19.5px; }
-    .t-track { flex-direction: column; align-items: center; gap: 13px; transform: none !important; }
-    .t-card { flex: none; width: 100%; max-width: 341px; height: auto; padding: 20px 18px 20px 19px; }
-    .t-card.extra { display: none; }
-    .t-head { gap: 9px; padding-left: 10px; }
-    .t-head img { width: 52px; height: 52px; }
-    .t-name { font-size: 14px; line-height: 18px; }
-    .t-card p { margin-top: 10px; font-size: 13.5px; line-height: 20px; -webkit-line-clamp: unset; }
-    .t-controls { display: none; } /* all cards are stacked on mobile, so arrows do nothing */
+    .t-stage { --card-w: min(300px, 100% - 40px); height: 300px; margin-top: 24px; }
+    .t-card { min-height: 280px; padding: 22px 20px 18px; border-radius: 18px; transform: translateX(calc(var(--pos, 0) * 78%)) scale(calc(1 - var(--abs, 0) * .12)); }
+    .t-quote { width: 30px; height: 22px; }
+    .t-card p { margin-top: 10px; font-size: 13.5px; line-height: 21px; }
+    .t-head { margin-top: 14px; padding-top: 14px; gap: 10px; }
+    .t-head img { width: 42px; height: 42px; }
+    .t-name { font-size: 14px; line-height: 19px; }
+    .t-role { font-size: 12px; }
+    .stars { font-size: 11px; letter-spacing: 1px; }
+    .t-controls { margin-top: 22px; gap: 16px; }
+    .t-progress { width: 110px; font-size: 12px; }
+    .t-count b { font-size: 16px; }
 
     /* Subscribe + footer */
     .subscribe-panel { border-radius: 30px 0 30px 0; padding-block: 32px; }

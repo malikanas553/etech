@@ -41,27 +41,72 @@ drawer?.addEventListener('click', (e) => e.target === drawer && toggleDrawer(fal
 drawer?.querySelectorAll('[data-drawer-link]').forEach((a) => a.addEventListener('click', () => toggleDrawer(false)));
 window.matchMedia('(min-width: 1240px)').addEventListener('change', (e) => e.matches && toggleDrawer(false));
 
-/* Testimonial slider: arrows move one card; the counter follows the design (01/15). */
-document.querySelectorAll('[data-slider]').forEach((slider) => {
-    const track = slider.querySelector('[data-track]');
-    const cards = [...track.children];
-    const counter = slider.querySelector('[data-counter]');
-    const total = Number(slider.dataset.total) || cards.length;
-    let index = 0;
+/* Testimonial deck: the active card sits in front and the others fan out behind it.
+   Arrows, clicking a side card, swiping and arrow keys all move it; autoplay runs while visible. */
+document.querySelectorAll('[data-deck]').forEach((deck) => {
+    const cards = [...deck.querySelectorAll('[data-deck-card]')];
+    const counter = deck.querySelector('[data-counter]');
+    const bar = deck.querySelector('[data-deck-bar]');
+    const stage = deck.querySelector('[data-deck-stage]');
+    const calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const n = cards.length;
+    let index = 0, timer = 0, inView = false, paused = false;
 
-    const visible = () => Math.max(1, Math.round(track.parentElement.clientWidth / (cards[0].offsetWidth + 38)));
     const render = () => {
-        const maxStart = Math.max(0, cards.length - visible());
-        const shift = Math.min(index % (maxStart + 1), maxStart);
-        track.style.transform = `translateX(-${shift * (cards[0].offsetWidth + 38)}px)`;
-        counter.textContent = `${String(index + 1).padStart(2, '0')}/${String(total).padStart(2, '0')}`;
+        cards.forEach((card, i) => {
+            let pos = i - index;
+            if (pos > n / 2) pos -= n;
+            if (pos < -n / 2) pos += n;
+            card.style.setProperty('--pos', pos);
+            card.style.setProperty('--abs', Math.min(Math.abs(pos), 3));
+            card.toggleAttribute('data-hidden', Math.abs(pos) > 2);
+            card.classList.toggle('is-active', pos === 0);
+            card.setAttribute('aria-hidden', String(pos !== 0));
+        });
+        counter.textContent = String(index + 1).padStart(2, '0');
         counter.classList.remove('flip');
         void counter.offsetWidth; // restart the flip animation
         counter.classList.add('flip');
+        restartBar();
     };
-    slider.querySelector('[data-prev]').addEventListener('click', () => { index = (index - 1 + total) % total; render(); });
-    slider.querySelector('[data-next]').addEventListener('click', () => { index = (index + 1) % total; render(); });
-    window.addEventListener('resize', render);
+    const go = (i) => { index = (i + n) % n; render(); };
+    const restartBar = () => {
+        clearTimeout(timer);
+        bar.classList.remove('run');
+        if (calm || !inView || paused) return;
+        void bar.offsetWidth;
+        bar.classList.add('run');
+        timer = setTimeout(() => go(index + 1), 6000);
+    };
+
+    deck.querySelector('[data-deck-prev]').addEventListener('click', () => go(index - 1));
+    deck.querySelector('[data-deck-next]').addEventListener('click', () => go(index + 1));
+    cards.forEach((card, i) => card.addEventListener('click', () => { if (i !== index) go(i); }));
+    deck.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight') go(index + 1);
+        if (e.key === 'ArrowLeft') go(index - 1);
+    });
+
+    // Swipe / drag.
+    let startX = null;
+    stage.addEventListener('pointerdown', (e) => { startX = e.clientX; });
+    stage.addEventListener('pointerup', (e) => {
+        if (startX === null) return;
+        const dx = e.clientX - startX;
+        startX = null;
+        if (Math.abs(dx) > 40) go(index + (dx < 0 ? 1 : -1));
+    });
+
+    // Autoplay only while on screen; hover or focus pauses it.
+    const setPaused = (v) => { paused = v; restartBar(); };
+    deck.addEventListener('pointerenter', (e) => e.pointerType === 'mouse' && setPaused(true));
+    deck.addEventListener('pointerleave', () => setPaused(false));
+    deck.addEventListener('focusin', () => setPaused(true));
+    deck.addEventListener('focusout', () => setPaused(false));
+    if ('IntersectionObserver' in window) {
+        new IntersectionObserver(([e]) => { inView = e.isIntersecting; restartBar(); }, { threshold: 0.35 }).observe(stage);
+    }
+    render();
 });
 
 /* Static page: forms don't post anywhere; validate and acknowledge. */
@@ -88,7 +133,7 @@ const revealGroups = [
     ['.collage', 'left'], ['.benefits h2, .benefit', 'right'],
     ['.courses .section-title, .courses .section-sub', 'up'], ['.course-card', 'up'],
     ['.instructor-grid > div:first-child > *', 'left'], ['.perks li', 'up'], ['.arch', 'right'],
-    ['.testimonials .section-title, .testimonials .section-sub', 'up'], ['.t-card', 'up'], ['.t-controls', 'up'],
+    ['.testimonials .section-title, .testimonials .section-sub', 'up'], ['.t-stage', 'zoom'], ['.t-controls', 'up'],
     ['.subscribe-card', 'zoom'],
     ['.footer-grid > *', 'up'],
 ];
@@ -272,3 +317,51 @@ function confetti(card, origin) {
         bit.addEventListener('animationend', () => bit.remove());
     }
 }
+
+/* Course slider: scroll-snap track with arrows, page dots and gentle autoplay. */
+document.querySelectorAll('[data-course-slider]').forEach((slider) => {
+    const track = slider.querySelector('[data-cs-track]');
+    const cards = [...track.children];
+    const dotsWrap = slider.querySelector('[data-cs-dots]');
+    const step = () => cards[1].offsetLeft - cards[0].offsetLeft;
+    const pages = () => Math.max(1, Math.round((track.scrollWidth - track.clientWidth) / step()) + 1);
+    const current = () => Math.round(track.scrollLeft / step());
+    const go = (i) => {
+        const n = pages();
+        track.scrollTo({ left: ((i % n) + n) % n * step(), behavior: reduceMotion ? 'auto' : 'smooth' });
+    };
+
+    let dots = [];
+    const buildDots = () => {
+        dotsWrap.innerHTML = '';
+        dots = Array.from({ length: pages() }, (_, i) => {
+            const b = document.createElement('button');
+            b.type = 'button';
+            b.setAttribute('aria-label', `Show course ${i + 1}`);
+            b.addEventListener('click', () => go(i));
+            dotsWrap.appendChild(b);
+            return b;
+        });
+        syncDots();
+    };
+    const syncDots = () => dots.forEach((d, i) => d.setAttribute('aria-current', String(i === current())));
+
+    slider.querySelector('[data-cs-prev]').addEventListener('click', () => go(current() - 1));
+    slider.querySelector('[data-cs-next]').addEventListener('click', () => go(current() + 1));
+    track.addEventListener('scroll', () => requestAnimationFrame(syncDots), { passive: true });
+    track.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight') { e.preventDefault(); go(current() + 1); }
+        if (e.key === 'ArrowLeft') { e.preventDefault(); go(current() - 1); }
+    });
+    let lastWidth = window.innerWidth;
+    window.addEventListener('resize', () => { if (window.innerWidth !== lastWidth) { lastWidth = window.innerWidth; buildDots(); } });
+    buildDots();
+
+    // Autoplay every 5s while visible; pauses on hover, focus or touch.
+    if (reduceMotion) return;
+    let paused = false, inView = false;
+    ['pointerenter', 'focusin', 'touchstart'].forEach((ev) => slider.addEventListener(ev, () => { paused = true; }, { passive: true }));
+    ['pointerleave', 'focusout'].forEach((ev) => slider.addEventListener(ev, () => { paused = false; }));
+    if ('IntersectionObserver' in window) new IntersectionObserver(([e]) => { inView = e.isIntersecting; }, { threshold: 0.4 }).observe(slider);
+    setInterval(() => { if (inView && !paused && !document.hidden) go(current() + 1); }, 5000);
+});

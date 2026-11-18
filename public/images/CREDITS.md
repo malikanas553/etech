@@ -22,3 +22,5 @@ People were cut out with rembg and the images were resized and converted to WebP
 | avatar-6.webp | photo-1534528741775-53994a69daeb |
 
 Each image ID resolves at `https://images.unsplash.com/<id>`.
+| course-marketing.webp | photo-1460925895917-afdab827c52f |
+| course-graphic.webp | photo-1561070791-2526d30994b5 |

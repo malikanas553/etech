@@ -4,7 +4,8 @@
         <h2 id="courses-title" class="section-title">{{ $c['title'] }}</h2>
         <p class="section-sub">{{ $c['text'] }}</p>
 
-        <div class="course-grid">
+        <div class="course-slider" data-course-slider>
+        <div class="course-grid" data-cs-track tabindex="0" role="group" aria-label="Popular courses, scroll horizontally">
             @foreach ($c['items'] as $course)
                 <article class="course-card">
                     <div class="thumb"><img src="{{ asset("images/{$course['image']}.webp") }}" alt="{{ $course['title'] }}" width="700" height="460" loading="lazy" decoding="async"></div>
@@ -25,6 +26,12 @@
                     </div>
                 </article>
             @endforeach
+        </div>
+        <div class="cs-controls">
+            <button type="button" class="cs-arrow" aria-label="Previous courses" data-cs-prev><x-icon name="chevron-left" :size="18" /></button>
+            <div class="cs-dots" data-cs-dots></div>
+            <button type="button" class="cs-arrow" aria-label="Next courses" data-cs-next><x-icon name="chevron-right" :size="18" /></button>
+        </div>
         </div>
     </div>
 </section>

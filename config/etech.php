@@ -56,6 +56,8 @@ return [
             ['image' => 'course-web', 'tag' => 'Web Design', 'rating' => '4.8', 'title' => 'Web Design & Development', 'classes' => 25, 'students' => 135, 'price' => '$560.00', 'teacher' => 'J. Morgan', 'avatar' => 'avatar-3'],
             ['image' => 'course-uiux', 'tag' => 'UI/UX Design', 'rating' => '5.0', 'title' => 'Wireframing & Prototyping', 'classes' => 8, 'students' => 400, 'price' => '$160.00', 'teacher' => 'Jordan Re', 'avatar' => 'avatar-4'],
             ['image' => 'course-python', 'tag' => 'Data Science', 'rating' => '4.9', 'title' => 'Python For Data Science', 'classes' => 18, 'students' => 150, 'price' => '$432.00', 'teacher' => 'Alex Taylor', 'avatar' => 'avatar-6'],
+            ['image' => 'course-marketing', 'tag' => 'Marketing', 'rating' => '4.7', 'title' => 'Digital Marketing & Analytics', 'classes' => 20, 'students' => 210, 'price' => '$380.00', 'teacher' => 'Sara Lee', 'avatar' => 'avatar-1'],
+            ['image' => 'course-graphic', 'tag' => 'Graphic Design', 'rating' => '4.9', 'title' => 'Color Theory For Designers', 'classes' => 12, 'students' => 275, 'price' => '$240.00', 'teacher' => 'Mia Carter', 'avatar' => 'avatar-5'],
         ],
     ],
 
