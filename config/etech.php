@@ -13,10 +13,11 @@ return [
     'brand' => 'Etech.',
 
     'nav' => [
-        ['label' => 'Courses', 'dropdown' => ['Web Design', 'UI/UX Design', 'Data Science']],
-        ['label' => 'Teachers', 'dropdown' => ['All Teachers', 'Become a Teacher']],
-        ['label' => 'Offers', 'dropdown' => ['Discounts', 'Free Courses']],
-        ['label' => 'Contact', 'dropdown' => null],
+        // `target` is the section id each item scrolls to.
+        ['label' => 'Courses', 'target' => 'courses', 'dropdown' => ['Web Design', 'UI/UX Design', 'Data Science']],
+        ['label' => 'Teachers', 'target' => 'instructor', 'dropdown' => ['All Teachers', 'Become a Teacher']],
+        ['label' => 'Offers', 'target' => 'benefits', 'dropdown' => ['Discounts', 'Free Courses']],
+        ['label' => 'Contact', 'target' => 'contact', 'dropdown' => null],
     ],
 
     'hero' => [
@@ -94,9 +95,9 @@ return [
     'footer' => [
         'about' => 'Explore a transformative approach to skill development on our online learning platform.',
         'columns' => [
-            'Company' => ['About Us', 'Services', 'Community', 'Testimonials'],
-            'Support' => ['Help Center', 'Tweet @ Us', 'Webinars', 'Feedback'],
-            'Links' => ['Courses', 'Become Teacher', 'Service', 'All in One'],
+            'Company' => ['About Us' => '#benefits', 'Services' => '#benefits', 'Community' => '#testimonials', 'Testimonials' => '#testimonials'],
+            'Support' => ['Help Center' => '#contact', 'Tweet @ Us' => 'https://x.com', 'Webinars' => '#courses', 'Feedback' => '#contact'],
+            'Links' => ['Courses' => '#courses', 'Become Teacher' => '#instructor', 'Service' => '#benefits', 'All in One' => '#courses'],
         ],
         'phone' => '+1 (555) 123-4567',
         'email' => 'etechinfo@gmail.com',

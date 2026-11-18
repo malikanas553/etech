@@ -2,11 +2,11 @@
 <section class="container-x hero-grid">
     <div class="hero-copy">
         {{-- The mobile design writes "new & unique way". --}}
-        <h1>Develop your skills in a new <span class="only-desktop">and</span><span class="only-mobile">&amp;</span> unique way</h1>
+        <h1><span class="shine-text">Develop your skills</span> in a new <span class="only-desktop">and</span><span class="only-mobile">&amp;</span> unique way</h1>
         <p>{{ $hero['text'] }}</p>
         <div class="hero-actions">
             <a href="#courses" class="btn btn-primary">{{ $hero['cta'] }}</a>
-            <a href="#" class="play-link">
+            <a href="#benefits" class="play-link">
                 <span class="play-icon"><x-icon name="play" :size="14" /></span>
                 {{ $hero['video'] }}
             </a>
@@ -15,7 +15,7 @@
 
     <div class="hero-art">
         <div class="hero-ring"><div class="hero-circle"></div></div>
-        <img class="hero-girl" src="{{ asset('images/hero.webp') }}" alt="Smiling student holding books" fetchpriority="high">
+        <img class="hero-girl" src="{{ asset('images/hero.webp') }}" alt="Smiling student holding books" width="748" height="1180" fetchpriority="high" decoding="async">
 
         <div class="float-card fc-courses">
             <span class="ico"><x-icon name="cursor" :size="16" /></span>
@@ -43,7 +43,7 @@
                     <div class="s">{{ $hero['class']['time'] }}</div>
                 </div>
             </div>
-            <a href="#" class="btn btn-primary">{{ $hero['class']['cta'] }}</a>
+            <a href="#courses" class="btn btn-primary">{{ $hero['class']['cta'] }}</a>
         </div>
     </div>
 </section>

@@ -9,6 +9,7 @@
                 <input id="subscribe-email" type="email" name="email" placeholder="{{ $s['placeholder'] }}" required>
                 <button type="submit" class="btn btn-white">{{ $s['button'] }}</button>
             </form>
+            <p class="form-status" data-status role="status" aria-live="polite"></p>
         </div>
     </div>
 </section>

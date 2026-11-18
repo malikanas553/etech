@@ -7,7 +7,7 @@
         <div class="course-grid">
             @foreach ($c['items'] as $course)
                 <article class="course-card">
-                    <div class="thumb"><img src="{{ asset("images/{$course['image']}.webp") }}" alt="{{ $course['title'] }}" loading="lazy"></div>
+                    <div class="thumb"><img src="{{ asset("images/{$course['image']}.webp") }}" alt="{{ $course['title'] }}" width="700" height="460" loading="lazy" decoding="async"></div>
                     <div class="course-body">
                         <div class="course-meta-top">
                             <span class="tag">{{ $course['tag'] }}</span>
@@ -15,8 +15,8 @@
                         </div>
                         <h3>{{ $course['title'] }}</h3>
                         <div class="course-stats">
-                            <span><x-icon name="book-open" :size="18" /> {{ $course['classes'] }} Classes</span>
-                            <span><x-icon name="users" :size="18" /> {{ $course['students'] }} Students</span>
+                            <span><x-icon name="book-open" :size="18" /> <span data-count="{{ $course['classes'] }}">{{ $course['classes'] }}</span> Classes</span>
+                            <span><x-icon name="users" :size="18" /> <span data-count="{{ $course['students'] }}">{{ $course['students'] }}</span> Students</span>
                         </div>
                         <div class="course-foot">
                             <span class="price">{{ $course['price'] }}</span>

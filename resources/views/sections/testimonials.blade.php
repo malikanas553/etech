@@ -1,5 +1,5 @@
 @php $t = config('etech.testimonials'); @endphp
-<section class="testimonials" aria-labelledby="testimonials-title" data-slider data-total="{{ $t['total'] }}">
+<section id="testimonials" class="testimonials" aria-labelledby="testimonials-title" data-slider data-total="{{ $t['total'] }}">
     <div class="container-x">
         <h2 id="testimonials-title" class="section-title">{{ $t['title'] }}</h2>
         <p class="section-sub">{{ $t['text'] }}</p>
@@ -13,7 +13,7 @@
                             <div>
                                 <div class="t-name">{{ $item['name'] }}</div>
                                 <div class="t-role">{{ $item['role'] }}</div>
-                                <div class="stars" aria-label="5 out of 5 stars">★★★★★</div>
+                                <div class="stars" role="img" aria-label="5 out of 5 stars">@for ($i = 0; $i < 5; $i++)<span style="--i: {{ $i }}">★</span>@endfor</div>
                             </div>
                         </div>
                         <p>{{ $item['quote'] }}</p>

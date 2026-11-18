@@ -6,6 +6,13 @@
       "runtimeExecutable": "php",
       "runtimeArgs": ["artisan", "serve", "--port", "8000"],
       "port": 8000
+    },
+    {
+      "name": "pages-test",
+      "runtimeExecutable": "php",
+      "runtimeArgs": ["-S", "localhost:8004", "-t", "D:/cache/etech/pages-test"],
+      "port": 8004,
+      "autoPort": false
     }
   ]
 }

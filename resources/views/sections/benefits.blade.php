@@ -1,12 +1,12 @@
 @php $b = config('etech.benefits'); @endphp
-<section class="benefits container-x" aria-labelledby="benefits-title">
+<section id="benefits" class="benefits container-x" aria-labelledby="benefits-title">
     <div class="benefits-grid">
         <div class="collage">
             <div class="collage-grid">
-                <div class="tile-pink tl"><img src="{{ asset('images/student-1.webp') }}" alt="Student holding books"></div>
-                <div class="tile-purple"><img src="{{ asset('images/student-2.webp') }}" alt="Student with backpack"></div>
-                <div class="tile-purple"><img src="{{ asset('images/student-3.webp') }}" alt="Student reading"></div>
-                <div class="tile-pink"><img src="{{ asset('images/student-4.webp') }}" alt="Student with a tablet"></div>
+                <div class="tile-pink tl"><img src="{{ asset('images/student-1.webp') }}" alt="Student holding books" width="331" height="520" loading="lazy" decoding="async"></div>
+                <div class="tile-purple"><img src="{{ asset('images/student-2.webp') }}" alt="Student with backpack" width="333" height="520" loading="lazy" decoding="async"></div>
+                <div class="tile-purple"><img src="{{ asset('images/student-3.webp') }}" alt="Student reading" width="310" height="520" loading="lazy" decoding="async"></div>
+                <div class="tile-pink"><img src="{{ asset('images/student-4.webp') }}" alt="Student with a tablet" width="244" height="520" loading="lazy" decoding="async"></div>
             </div>
         </div>
 

@@ -1,5 +1,5 @@
 @php $i = config('etech.instructor'); @endphp
-<section class="instructor container-x" aria-labelledby="instructor-title">
+<section id="instructor" class="instructor container-x" aria-labelledby="instructor-title">
     <div class="instructor-grid">
         <div>
             <h2 id="instructor-title">{{ $i['title'] }} <span class="accent">{{ $i['accent'] }}</span></h2>
@@ -10,12 +10,12 @@
                     <li>{{ $perk }}</li>
                 @endforeach
             </ul>
-            <a href="#" class="btn btn-primary">{{ $i['cta'] }}</a>
+            <a href="#contact" class="btn btn-primary">{{ $i['cta'] }}</a>
         </div>
 
         <div class="arch">
             <div class="arch-inner">
-                <img src="{{ asset('images/instructor.webp') }}" alt="Certified teacher with a notepad" loading="lazy">
+                <img src="{{ asset('images/instructor.webp') }}" alt="Certified teacher with a notepad" width="674" height="820" loading="lazy" decoding="async">
             </div>
         </div>
     </div>
