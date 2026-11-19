@@ -2,7 +2,7 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     @php
-        $title = trim($__env->yieldContent('title', 'Etech. — Develop your skills in a new and unique way'));
+        $title = trim($__env->yieldContent('title', 'Etech — Develop your skills in a new and unique way'));
         $description = 'Online courses in web design, UI/UX and data science taught by industry experts. 50+ courses, 1.5k+ video lessons and accredited online degrees — learn at your own pace with Etech.';
         $canonical = rtrim(url('/'), '/').'/';
     @endphp

@@ -10,7 +10,7 @@
 
 return [
 
-    'brand' => 'Etech.',
+    'brand' => 'Etech',
 
     'nav' => [
         // `target` is the section id each item scrolls to.

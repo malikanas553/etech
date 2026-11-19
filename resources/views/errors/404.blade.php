@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Page not found — Etech.')
+@section('title', 'Page not found — Etech')
 
 @section('content')
     <main class="error-page">
